@@ -203,28 +203,26 @@ impl GlobalBarrierWorker<GlobalBarrierWorkerContextImpl> {
             }
         }
 
-        {
-            // Bootstrap recovery. Here we simply trigger a recovery process to achieve the
-            // consistency.
-            // Even if there's no actor to recover, we still go through the recovery process to
-            // inject the first `Initial` barrier.
-            let span = tracing::info_span!("bootstrap_recovery");
-            crate::telemetry::report_event(
-                risingwave_pb::telemetry::TelemetryEventStage::Recovery,
-                "normal_recovery",
-                0,
-                None,
-                None,
-                None,
-            );
+        // Bootstrap recovery. Here we simply trigger a recovery process to achieve the
+        // consistency.
+        // Even if there's no actor to recover, we still go through the recovery process to
+        // inject the first `Initial` barrier.
+        let span = tracing::info_span!("bootstrap_recovery");
+        crate::telemetry::report_event(
+            risingwave_pb::telemetry::TelemetryEventStage::Recovery,
+            "normal_recovery",
+            0,
+            None,
+            None,
+            None,
+        );
 
-            let paused = self.take_pause_on_bootstrap().await.unwrap_or(false);
-            let paused_reason = paused.then_some(PausedReason::Manual);
+        let paused = self.take_pause_on_bootstrap().await.unwrap_or(false);
+        let paused_reason = paused.then_some(PausedReason::Manual);
 
-            self.recovery(paused_reason, None, RecoveryReason::Bootstrap)
-                .instrument(span)
-                .await;
-        }
+        self.recovery(paused_reason, None, RecoveryReason::Bootstrap)
+            .instrument(span)
+            .await;
 
         self.run_inner(shutdown_rx).await
     }
