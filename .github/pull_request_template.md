@@ -1,5 +1,7 @@
 I hereby agree to the terms of the [RisingWave Labs, Inc. Contributor License Agreement](https://gist.github.com/TennyZhuang/f00be7f16996ea48effb049aa7be4d66#file-rw_cla).
 
+Highest Release Version: 
+
 ## What's changed and what's your intention?
 
 <!--
